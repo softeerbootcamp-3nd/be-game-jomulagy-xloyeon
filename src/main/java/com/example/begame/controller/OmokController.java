@@ -1,8 +1,43 @@
 package com.example.begame.controller;
 
+import com.example.begame.domain.JsonRequest;
+import com.example.begame.service.OmokService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
+@RequestMapping("")
 public class OmokController {
+
+    private final OmokService omokService;
+
+    @GetMapping("")
+    public String main(){
+        System.out.println("hi");
+        return "index";
+    }
+
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity<Map<String,Boolean>> check(@RequestBody JsonRequest jsonRequest){
+        int player = jsonRequest.getPlayer();
+        int other = jsonRequest.getOther();
+        int xpos = jsonRequest.getX();
+        int ypos = jsonRequest.getY();
+        Map<String, Boolean> result = new HashMap<>();
+//        result.put("is_check",);
+        result.put("is_end",omokService.isFive(player,other,xpos,ypos));
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 }

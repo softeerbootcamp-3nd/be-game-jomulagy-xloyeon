@@ -1,12 +1,15 @@
 package com.example.begame.domain;
 
+import java.util.Arrays;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+
 @Setter
 @Getter
-import java.util.Arrays;
-
+@Component
 public class Board {
     private int[][] board;
 
