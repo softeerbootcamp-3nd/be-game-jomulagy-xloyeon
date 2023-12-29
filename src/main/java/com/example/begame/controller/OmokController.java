@@ -22,7 +22,7 @@ public class OmokController {
 
     @GetMapping("")
     public String main(){
-        System.out.println("hi");
+        omokService.initBoard();
         return "index";
     }
 
@@ -33,9 +33,10 @@ public class OmokController {
         int other = jsonRequest.getOther();
         int xpos = jsonRequest.getX();
         int ypos = jsonRequest.getY();
+        omokService.updateBoard(player,xpos,ypos);
         Map<String, Boolean> result = new HashMap<>();
-//        result.put("is_check",);
-        result.put("is_end",omokService.isFive(player,other,xpos,ypos));
+        result.put("is_forbidden",omokService.is_Forbidden(xpos,ypos,player));
+        result.put("is_end",omokService.fiveStone(player,xpos,ypos));
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
