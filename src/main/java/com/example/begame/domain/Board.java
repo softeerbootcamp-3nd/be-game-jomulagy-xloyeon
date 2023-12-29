@@ -49,6 +49,6 @@ public class Board {
     }
 
     public boolean isSame(int k, int x, int y){
-        return board[x][y] == k;
+        return board[y][x] == k;
     }
 }

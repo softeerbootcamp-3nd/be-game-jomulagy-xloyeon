@@ -154,8 +154,8 @@ function isClicked(xPos, yPos){
 	if (resultPos.x > -1 && resultPos.x < 19 && resultPos.y > -1
 	 && resultPos.y < 19 && boardArray[resultPos.x][resultPos.y] == 0){
 	    var requestData = {
-            xpos: resultPos.x,
-            ypos: resultPos.y,
+            x: resultPos.x,
+            y: resultPos.y,
             player: turn,
             other: 3-turn
         };
@@ -167,9 +167,19 @@ function isClicked(xPos, yPos){
             success: function (response) {
                 // 성공적으로 응답을 받았을 때 수행할 작업
                 console.log(response);
-                boardArray[resultPos.x][resultPos.y] = turn;
+                if(response.is_forbidden){
+                    alert("해당 위치에는 착수 할 수 없습니다.");
+                }
+                else{
+                    boardArray[resultPos.x][resultPos.y] = turn;
 
-		        turn = 3 - turn; //turn change
+		            turn = 3 - turn; //turn change
+                    if(response.is_end){
+                        alert("player"+turn+"이 승리하였습니다.");
+                        location.reload();
+                    }
+                }
+
             },
             error: function (error) {
                 // 오류가 발생했을 때 수행할 작업

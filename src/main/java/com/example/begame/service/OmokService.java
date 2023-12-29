@@ -17,6 +17,9 @@ public class OmokService {
     private int currentPlayer; //흑 : 1
     private int otherPlayer; //백 : 2
 
+    public void initBoard(){
+        board.clear();
+    }
     //돌 놓기
     public boolean updateBoard(int player, int xpos, int ypos){
         if(board.isValidate(xpos,ypos)){
@@ -28,22 +31,14 @@ public class OmokService {
     }
 
     //금수인지 확인
-    public boolean is_Forbidden(int xpos, int ypos, boolean playerA){
+    public boolean is_Forbidden(int xpos, int ypos, int playerA){
         x = xpos;
         y = ypos;
 
-        if(playerA) {
-            currentPlayer = 1; //1: 흑
-            otherPlayer = 2;
-        }else {
-            currentPlayer = 2; //2: 백
-            otherPlayer = 1;
-        }
+        currentPlayer = playerA; //1: 흑
+        otherPlayer = 3-playerA;
         //보드판에 일단기록
         board.update(currentPlayer, y, x);
-
-        if(fiveStone())
-            return true;
 
         if(samsam())
             return true;
@@ -55,6 +50,7 @@ public class OmokService {
         if(jangmok())
             return true;
 
+        board.update(0, y, x);
         return false;
     }
 
@@ -157,6 +153,9 @@ public class OmokService {
         }
 
         allStone = stone1 + stone2;
+        System.out.println("allStone = " + allStone);
+        System.out.println("stone1 = " + stone1);
+        System.out.println("stone2 = " + stone2);
         //삼삼이므로 돌갯수가 2 + 1(현재돌)이아니면 0리턴
         //이부분이 43을 허용하게해줌. 33만 찾게됨
         if(allStone != 4) {
@@ -555,7 +554,7 @@ public class OmokService {
         right :
         while(true) {
             //좌표끝도달
-            if(xx == 16)
+            if(xx == 19)
                 break right;
 
             if(board.isSame(currentPlayer, y, xx))
@@ -598,7 +597,7 @@ public class OmokService {
         int right = (stone2 + blink2);
 
         //벽으로 막힌경우 - 열린3이 아님
-        if(x - left == 0 || x + right == 15) {
+        if(x - left == 0 || x + right == 18) {
             return 0;
         }else //상대돌로 막힌경우 - 열린3이 아님
             if(board.isSame(otherPlayer, y, x-left-1)|| board.isSame(otherPlayer, y, x+right+1)) {
@@ -665,7 +664,7 @@ public class OmokService {
         check = false;
         rightDown:
         while(true) {
-            if(xx == 16 || yy == 16)
+            if(xx == 19 || yy == 19)
                 break rightDown;
 
             if(board.isSame(p, yy, xx))
@@ -704,7 +703,7 @@ public class OmokService {
         int leftUp = (stone1 + blink1);
         int rightDown = (stone2 + blink2);
 
-        if(y - leftUp == 0 || x - leftUp == 0 || y + rightDown == 15 || x + rightDown == 15) {
+        if(y - leftUp == 0 || x - leftUp == 0 || y + rightDown == 18 || x + rightDown == 18) {
             return 0;
         }else
         if(board.isSame(otherPlayer, y-leftUp-1, x-leftUp-1)|| board.isSame(otherPlayer, y+rightDown+1, x+rightDown+1)) {
@@ -764,7 +763,7 @@ public class OmokService {
         check = false;
         down :
         while(true) {
-            if(yy == 16)
+            if(yy == 19)
                 break down;
 
             if(board.isSame(currentPlayer, yy, x))
@@ -802,7 +801,7 @@ public class OmokService {
         int up = (stone1 + blink1);
         int down = (stone2 + blink2);
 
-        if(y - up == 0 || y + down == 15) {
+        if(y - up == 0 || y + down == 18) {
             return 0;
         }else
         if(board.isSame(otherPlayer, y-up-1, x)|| board.isSame(otherPlayer, y+down+1, x)) {
@@ -825,7 +824,7 @@ public class OmokService {
         boolean check = false;
         leftDown :
         while(true) {
-            if(xx == -1 || yy == 16)
+            if(xx == -1 || yy == 19)
                 break leftDown;
 
             if(board.isSame(currentPlayer, yy, xx))
@@ -864,7 +863,7 @@ public class OmokService {
         check = false;
         rightUp :
         while(true) {
-            if(xx == 16 || yy == -1)
+            if(xx == 19 || yy == -1)
                 break rightUp;
 
             if(board.isSame(currentPlayer, yy, xx))
@@ -904,7 +903,7 @@ public class OmokService {
         int leftDown = (stone1 + blink1);
         int rightUp = (stone2 + blink2);
 
-        if(x - leftDown == 0 || y - rightUp == 0|| y + leftDown == 15 || x + rightUp == 15) {
+        if(x - leftDown == 0 || y - rightUp == 0|| y + leftDown == 18 || x + rightUp == 18) {
             return 0;
         }else
         if(board.isSame(otherPlayer, y+leftDown+1, x-leftDown-1)|| board.isSame(otherPlayer, y-rightUp-1, x+rightUp+1)) {
@@ -948,15 +947,21 @@ public class OmokService {
         int blink1 = 1;
         if(trigger == 3) // 5목달성조건은 빈공간없이 5개가 이어져야함.
             blink1 = 0;
-
         // ←  탐색
         int yy = y;
         int xx = x - 1;
         boolean check = false;
+
+        System.out.println("← → 탐색");
+
+
         left :
         while(true) {
             if(xx == -1)
                 break left;
+
+            System.out.println("("+yy+" ,"+xx+")");
+            System.out.println(board.getBoard()[yy][xx]+"->"+board.isSame(p, yy, xx));
 
             if(board.isSame(p, yy, xx)) {
                 check = false;
@@ -994,8 +999,11 @@ public class OmokService {
         check = false;
         right :
         while(true) {
-            if(xx == 16)
+            if(xx == 19)
                 break right;
+
+            System.out.println("("+yy+" ,"+xx+")");
+            System.out.println(board.getBoard()[yy][xx]+"->"+board.isSame(p, yy, xx));
 
             if(board.isSame(p, yy, xx)) {
                 check = false;
@@ -1028,6 +1036,9 @@ public class OmokService {
 
         allStone = stone1 + stone2;
 
+        System.out.println("allStone = " + allStone);
+        System.out.println("stone1 = " + stone1);
+        System.out.println("stone2 = " + stone2);
         //사사찾는 트리거
         if (trigger == 1) {
             if (allStone != 3)
@@ -1112,7 +1123,7 @@ public class OmokService {
         int blink2 = blink1;
         leftDown :
         while(true) {
-            if(xx == 16 || yy == 16)
+            if(xx == 19 || yy == 19)
                 break leftDown;
 
             if(board.isSame(p, yy, xx)) {
@@ -1181,6 +1192,8 @@ public class OmokService {
         if(trigger == 3)
             blink1 = 0;
 
+        System.out.println("↑ ↓ 탐색");
+
         // ↑  탐색
         int yy = y - 1;
         int xx = x;
@@ -1190,6 +1203,8 @@ public class OmokService {
             if(yy == -1)
                 break up;
 
+            System.out.println("("+yy+" ,"+xx+")");
+            System.out.println(board.getBoard()[yy][xx]+"->"+board.isSame(p, yy, xx));
             if(board.isSame(p, yy, xx)) {
                 check = false;
                 stone1++;
@@ -1225,8 +1240,11 @@ public class OmokService {
         int blink2 = blink1;
         down :
         while(true) {
-            if(yy == 16)
+            if(yy == 19)
                 break down;
+
+            System.out.println("("+yy+" ,"+xx+")");
+            System.out.println(board.getBoard()[yy][xx]+"->"+board.isSame(p, yy, xx));
 
             if(board.isSame(p, yy, xx)) {
                 check = false;
@@ -1259,7 +1277,9 @@ public class OmokService {
 
 
         allStone = stone1 + stone2;
-
+        System.out.println("allStone = " + allStone);
+        System.out.println("stone1 = " + stone1);
+        System.out.println("stone2 = " + stone2);
         if (trigger == 1) {
             if (allStone != 3)
                 return 0;
@@ -1300,7 +1320,7 @@ public class OmokService {
         boolean check = false;
         rightup :
         while(true) {
-            if(xx == 16 || yy == -1)
+            if(xx == 19 || yy == -1)
                 break rightup;
 
             if(board.isSame(p, yy, xx)) {
@@ -1339,7 +1359,7 @@ public class OmokService {
         int blink2 = blink1;
         leftdown :
         while(true) {
-            if(xx == -1 || yy == 16)
+            if(xx == -1 || yy == 19)
                 break leftdown;
 
             if(board.isSame(p, yy, xx)) {
@@ -1415,8 +1435,19 @@ public class OmokService {
         return false;
     }
 
-    public boolean fiveStone() {
+    public boolean fiveStone(int currentPlayer,int xpos, int ypos) {
         int result = 0;
+        setMethods(currentPlayer,3-currentPlayer,xpos,ypos);
+
+        for(int i=0;i<19;i++){
+            for(int j = 0; j<19;j++){
+                System.out.print(board.getBoard()[j][i]);
+            }
+            System.out.println();
+        }
+
+        System.out.println("player "+currentPlayer+" turn");
+
 
         result += fourORjang1(3);
         result += fourORjang2(3);
@@ -1429,6 +1460,15 @@ public class OmokService {
 
         return false;
     }
+
+    private void setMethods(int currentPlayer, int otherPlayer,int x,int y){
+        this.currentPlayer = currentPlayer;
+        this.otherPlayer = otherPlayer;
+        this.x = x;
+        this.y = y;
+    }
+
+
 
 
 //    static boolean main(int[][] board , int x , int y , boolean playerA) {
