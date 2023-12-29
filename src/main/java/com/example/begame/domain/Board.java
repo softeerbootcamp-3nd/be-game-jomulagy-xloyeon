@@ -1,11 +1,12 @@
 package com.example.begame.domain;
 
-import java.util.Arrays;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
+import java.util.Arrays;
 
 @Setter
 @Getter
@@ -45,5 +46,9 @@ public class Board {
         if(board[x][y] != 0)
             return false;
         return true;
+    }
+
+    public boolean isSame(int k, int x, int y){
+        return board[x][y] == k;
     }
 }
