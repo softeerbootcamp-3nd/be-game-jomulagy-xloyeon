@@ -7,3 +7,8 @@
 out
 gen
 /src/main/resources/application.properties
+*.lock
+*.properties
+.gradle/8.5/checksums/md5-checksums.bin
+.gradle/8.5/checksums/sha1-checksums.bin
+.gradle/8.5/fileChanges/last-build.bin
