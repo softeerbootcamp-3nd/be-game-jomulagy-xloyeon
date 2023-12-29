@@ -1,5 +1,10 @@
 package com.example.begame.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+@Setter
+@Getter
 import java.util.Arrays;
 
 public class Board {
