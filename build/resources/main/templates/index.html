@@ -11,15 +11,12 @@
         
     </style>
     <title>Document</title>
-
 </head>
 <body>
     <div id="boardWraaper">
         <canvas id="board" width="600" height="600"></canvas>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-    <script>
+   <script>
         var c = document.getElementById("board");
 var ctx = c.getContext("2d");
 var width = 600;
@@ -153,30 +150,9 @@ function isClicked(xPos, yPos){
 	resultPos = getMouseRoundPos(xPos, yPos);
 	if (resultPos.x > -1 && resultPos.x < 19 && resultPos.y > -1
 	 && resultPos.y < 19 && boardArray[resultPos.x][resultPos.y] == 0){
-	    var requestData = {
-            xpos: resultPos.x,
-            ypos: resultPos.y,
-            player: turn,
-            other: 3-turn
-        };
-	    $.ajax({
-            type: 'POST',
-            url: '',  // 실제 API 엔드포인트로 대체해야 함
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function (response) {
-                // 성공적으로 응답을 받았을 때 수행할 작업
-                console.log(response);
-                boardArray[resultPos.x][resultPos.y] = turn;
-
-		        turn = 3 - turn; //turn change
-            },
-            error: function (error) {
-                // 오류가 발생했을 때 수행할 작업
-                console.error(error);
-            }
-        });
-
+		boardArray[resultPos.x][resultPos.y] = turn;
+		// checkOmok(turn, resultPos.x, resultPos.y);
+		turn = 3 - turn; //turn change
 	}
 	updateBoard();
 }
